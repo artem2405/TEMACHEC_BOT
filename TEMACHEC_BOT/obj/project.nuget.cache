@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "eyGd7+wqWy1QOo64NBzYA4dQss/A2nxsOPJW6L2R9OvGW5WKCgCnTYxV345An995FPI+zDDoGZ3UIHlfe09sjQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\artem\\Desktop\\PROGS\\TEMACHEC_BOT\\TEMACHEC_BOT\\TEMACHEC_BOT.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\artem\\.nuget\\packages\\htmlagilitypack\\1.11.49\\htmlagilitypack.1.11.49.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\microsoft.identitymodel.abstractions\\6.19.0\\microsoft.identitymodel.abstractions.6.19.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\microsoft.identitymodel.logging\\6.19.0\\microsoft.identitymodel.logging.6.19.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.19.0\\microsoft.identitymodel.tokens.6.19.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\openqa.selenium.chrome.chromedriverextensions\\1.2.0\\openqa.selenium.chrome.chromedriverextensions.1.2.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\selenium.webdriver\\4.12.4\\selenium.webdriver.4.12.4.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\system.security.cryptography.cng\\4.5.0\\system.security.cryptography.cng.4.5.0.nupkg.sha512",
+    "C:\\Users\\artem\\.nuget\\packages\\telegram.bot\\19.0.0\\telegram.bot.19.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
