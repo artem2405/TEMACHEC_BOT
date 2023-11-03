@@ -54,9 +54,11 @@ class Bot
                 check = 2;
                 break;
             case "3": // ЗАПИСЫВАЕМ НОВЫЕ ДАННЫЕ В БАЗУ ДАННЫХ
-                await arg1.SendTextMessageAsync(message.Chat.Id, "ЗАПИСЬ НОВЫХ ДАННЫХ");
-                string NickName = "MAYOT";
-                string newAlbum = "GHETTO GARDEN, A, B, C, D, E";
+                await arg1.SendTextMessageAsync(message.Chat.Id, "ЗАПИСЬ НОВОГО АЛЬБОМА В БАЗУ ДАННЫХ");
+                Console.Write("ВВЕДИТЕ НИКНЕЙМ ИСПОЛНИТЕЛЯ: ");
+                string NickName = Console.ReadLine();
+                Console.Write("ВВЕДИТЕ НАЗВАНИЕ АЛЬБОМА И НАЗВАНИЯ ТРЕКОВ ЧЕРЕЗ ЗАПЯТУЮ И ПРОБЕЛ: ");
+                string newAlbum = Console.ReadLine();
                 Artist art = new Artist(NickName, newAlbum);
                 SaveToDB(art);
                 break;
@@ -73,7 +75,7 @@ class Bot
 
                         case 1:
                             // поиск и проверка сниппетов на содержание и актулаьность
-                            Search_And_Check(message);
+                            // Search_And_Check(message);
                             //for (int i = 0; i < 8; i++)
                             //{
                             //    names_of_videos[i] = elems[i].Text;
