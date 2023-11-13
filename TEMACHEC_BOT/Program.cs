@@ -44,6 +44,12 @@ class Bot
         Console.WriteLine($"От пользователя {message.Chat.Username} пришло сообщение с текстом: {message.Text}");
         Console.WriteLine();
 
+        //СОЗДАНИЕ КНОПОК
+        ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]{new KeyboardButton[] { "СНИППЕТЫ", "ОТКУДА ТРЕК" },})
+        {
+            ResizeKeyboard = true
+        };
+
         switch (message.Text)
         {
             case "1":
@@ -71,7 +77,7 @@ class Bot
                         case 0:
                             await client.SendTextMessageAsync(message.Chat.Id,
                             "Привет! \nНажми кнопку СНИППЕТЫ, если хочешь получить сниппеты исполнителя " +
-                            "\nНажми кнопку ОТКУДА ТРЕК, если хочешь узнать из какого альбома трек исполнителя", replyMarkup: GetButtons());
+                            "\nНажми кнопку ОТКУДА ТРЕК, если хочешь узнать из какого альбома трек исполнителя", replyMarkup: replyKeyboardMarkup);
                             break;
 
                         case 1:
@@ -95,16 +101,6 @@ class Bot
         return;
     }
 
-    private static IReplyMarkup GetButtons()
-    {
-        return new ReplyKeyboardMarkup
-        {
-            Keyboard = new List<List<KeyboardButton>>
-            {
-                new List<KeyboardButton>{ new KeyboardButton("СНИППЕТЫ"), new KeyboardButton("ОТКУДА ТРЕК") }
-            }
-        };
-    }
 
     async static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
     {
