@@ -7,6 +7,7 @@ using static System.Net.WebRequestMethods;
 using Newtonsoft.Json;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
+using Telegram.Bot.Types.ReplyMarkups;
 
 class Bot
 {
@@ -34,10 +35,10 @@ class Bot
         }
     }
 
-    private static async Task Update(ITelegramBotClient arg1, Update arg2, CancellationToken arg3)
+    private static async Task Update(ITelegramBotClient client, Update update, CancellationToken token)
     {
         Thread.Sleep(1000);
-        var message = arg2.Message;
+        var message = update.Message;
 
         Console.WriteLine();
         Console.WriteLine($"От пользователя {message.Chat.Username} пришло сообщение с текстом: {message.Text}");
@@ -46,15 +47,15 @@ class Bot
         switch (message.Text)
         {
             case "1":
-                await arg1.SendTextMessageAsync(message.Chat.Id, "Введи никнейм исполнителя");
+                await client.SendTextMessageAsync(message.Chat.Id, "Введи никнейм исполнителя");
                 check = 1;
                 break;
             case "2":
-                await arg1.SendTextMessageAsync(message.Chat.Id, "Введи через запятую никнейм исполнителя и название трека");
+                await client.SendTextMessageAsync(message.Chat.Id, "Введи через запятую никнейм исполнителя и название трека");
                 check = 2;
                 break;
             case "3": // ЗАПИСЫВАЕМ НОВЫЕ ДАННЫЕ В БАЗУ ДАННЫХ
-                await arg1.SendTextMessageAsync(message.Chat.Id, "ЗАПИСЬ НОВОГО АЛЬБОМА В БАЗУ ДАННЫХ");
+                await client.SendTextMessageAsync(message.Chat.Id, "ЗАПИСЬ НОВОГО АЛЬБОМА В БАЗУ ДАННЫХ");
                 Console.Write("ВВЕДИТЕ НИКНЕЙМ ИСПОЛНИТЕЛЯ: ");
                 string NickName = Console.ReadLine();
                 Console.Write("ВВЕДИТЕ НАЗВАНИЕ АЛЬБОМА И НАЗВАНИЯ ТРЕКОВ ЧЕРЕЗ ЗАПЯТУЮ И ПРОБЕЛ: ");
@@ -68,9 +69,9 @@ class Bot
                     switch (check)
                     {
                         case 0:
-                            await arg1.SendTextMessageAsync(message.Chat.Id,
-                            "Привет! \nВведи 1, если хочешь получить сниппеты исполнителя " +
-                            "\nВведи 2, если хочешь узнать из какого альбома трек исполнителя");
+                            await client.SendTextMessageAsync(message.Chat.Id,
+                            "Привет! \nНажми кнопку СНИППЕТЫ, если хочешь получить сниппеты исполнителя " +
+                            "\nНажми кнопку ОТКУДА ТРЕК, если хочешь узнать из какого альбома трек исполнителя", replyMarkup: GetButtons());
                             break;
 
                         case 1:
@@ -93,7 +94,17 @@ class Bot
         }
         return;
     }
-        
+
+    private static IReplyMarkup GetButtons()
+    {
+        return new ReplyKeyboardMarkup
+        {
+            Keyboard = new List<List<KeyboardButton>>
+            {
+                new List<KeyboardButton>{ new KeyboardButton("СНИППЕТЫ"), new KeyboardButton("ОТКУДА ТРЕК") }
+            }
+        };
+    }
 
     async static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
     {
