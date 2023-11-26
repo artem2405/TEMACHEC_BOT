@@ -23,21 +23,21 @@ class Bot
         Console.ReadLine();
     }
 
-    private static async Task WrapUpdate(ITelegramBotClient client, Update update, CancellationToken token)
-    {
-        try
-        {
-            await Update(client, update, token);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
+    //private static async Task WrapUpdate(ITelegramBotClient client, Update update, CancellationToken token)
+    //{
+    //    try
+    //    {
+    //        await Update(client, update, token);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Console.WriteLine(e);
+    //    }
+    //}
 
     private static async Task Update(ITelegramBotClient client, Update update, CancellationToken token)
     {
-        Thread.Sleep(1000);
+        //Thread.Sleep(1000);
         var message = update.Message;
 
         Console.WriteLine();
@@ -52,7 +52,7 @@ class Bot
 
         switch (message.Text)
         {
-            case "1":
+            case "СНИППЕТЫ":
                 await client.SendTextMessageAsync(message.Chat.Id, "Введи никнейм исполнителя");
                 check = 1;
                 break;
@@ -81,12 +81,13 @@ class Bot
                             break;
 
                         case 1:
-                            // поиск и проверка сниппетов на содержание и актулаьность
-                            // Search_And_Check(message);
-                            //for (int i = 0; i < 8; i++)
+                            // поиск и проверка сниппетов на содержание и актуальность
+                            string[] names_of_videos = Search_And_Check(message);
+                            for (int i = 0; i < names_of_videos.Length; i++)
+                            Console.WriteLine("СПИСОК НАЗВАНИЙ ВИДЕО: {0}", names_of_videos);
+                            //for (int i = 0; i < 10; i++)
                             //{
-                            //    names_of_videos[i] = elems[i].Text;
-                            //    await arg1.SendTextMessageAsync(message.Chat.Id, names_of_videos[i]);
+                            //    await client.SendTextMessageAsync(message.Chat.Id, names_of_videos[i]);
                             //}
 
                             break;
@@ -104,6 +105,7 @@ class Bot
 
     async static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
     {
+        await Task.Delay(0);
         Console.WriteLine(arg2.Message);
         return;
     }
@@ -111,28 +113,37 @@ class Bot
     static string[] Search_And_Check(Message message)
     {
         IWebDriver driver = new ChromeDriver("C:\\Users\\artem\\Desktop\\PROGS\\TEMACHEC_BOT");
-        string video_href = "https://www.youtube.com/results?search_query=" + message.Text + " snippet";
+        string video_href = "https://www.youtube.com/results?search_query=" + message.Text + " snippet&sp=EgQIBBAB";
         driver.Url = video_href;
 
-        ReadOnlyCollection<IWebElement> elems = driver.FindElements(By.Id("video-title"));
-        for (int i = 0; i < 4; i++)
+        try
         {
-            Console.WriteLine(elems[i].GetAttribute("aria-label"));
-        }
-        Console.WriteLine();
+            ReadOnlyCollection<IWebElement> elems = driver.FindElements(By.Id("video-title"));
 
-        int j = 0;
-        string[] names_of_videos = new string[elems.Count];
-        while (j < 10)
-        {
-            if (elems[j].Text.IndexOf("snippet")!=0 || elems[j].Text.IndexOf("Snippet")!=0)
+            for (int i = 0; i < elems.Count; i++)
             {
-                
+                Console.WriteLine(elems[i].GetAttribute("title"));
             }
-        }
+            Console.WriteLine(elems.Count);
 
-        driver.Quit();
-        return names_of_videos;
+            string[] names_of_videos = new string[elems.Count];
+            for (int i = 0; i < names_of_videos.Length; i++)
+            {
+                if ((elems[i].Text.IndexOf("snippet") != -1 || elems[i].Text.IndexOf("Snippet") != -1) &&
+                        (elems[i].Text.IndexOf(message.Text) != -1))
+                {
+                    names_of_videos[i] = elems[i].GetAttribute("title");
+                }
+            }
+            driver.Quit();
+            return names_of_videos;
+        }
+        catch (Exception ex) 
+        {
+            Console.WriteLine($"ОШИБКА: {ex.Message}");
+            driver.Quit();
+            return null;
+        }
     }
 
     static List<Artist> ReadFromDB()
