@@ -19,21 +19,21 @@ class Bot
     static void Main()
     {
         client = new TelegramBotClient(token);
-        client.StartReceiving(Update, Error);
+        client.StartReceiving(WrapUpdate, Error);
         Console.ReadLine();
     }
 
-    //private static async Task WrapUpdate(ITelegramBotClient client, Update update, CancellationToken token)
-    //{
-    //    try
-    //    {
-    //        await Update(client, update, token);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Console.WriteLine(e);
-    //    }
-    //}
+    private static async Task WrapUpdate(ITelegramBotClient client, Update update, CancellationToken token)
+    {
+        try
+        {
+            await Update(client, update, token);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 
     private static async Task Update(ITelegramBotClient client, Update update, CancellationToken token)
     {
@@ -82,14 +82,12 @@ class Bot
 
                         case 1:
                             // поиск и проверка сниппетов на содержание и актуальность
-                            string[] names_of_videos = Search_And_Check(message);
-                            for (int i = 0; i < names_of_videos.Length; i++)
-                            Console.WriteLine("СПИСОК НАЗВАНИЙ ВИДЕО: {0}", names_of_videos);
-                            //for (int i = 0; i < 10; i++)
-                            //{
-                            //    await client.SendTextMessageAsync(message.Chat.Id, names_of_videos[i]);
-                            //}
-
+                            await client.SendTextMessageAsync(message.Chat.Id, "ПОЖАЛУЙСТА, ПОДОЖДИ НЕСКОЛЬКО СЕКУНД....");
+                            Search_And_Check(message, out List<string> names_of_videos, out List<string> refs_of_videos);
+                            for (int i = 0; i < 10; i++)
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, names_of_videos[i]+ "\n" + refs_of_videos[i]);
+                            }
                             break;
 
                         case 2:
@@ -110,7 +108,7 @@ class Bot
         return;
     }
 
-    static string[] Search_And_Check(Message message)
+    static List<string> Search_And_Check(Message message, out List<string> names_of_videos, out List<string> refs_of_videos)
     {
         IWebDriver driver = new ChromeDriver("C:\\Users\\artem\\Desktop\\PROGS\\TEMACHEC_BOT");
         string video_href = "https://www.youtube.com/results?search_query=" + message.Text + " snippet&sp=EgQIBBAB";
@@ -118,30 +116,28 @@ class Bot
 
         try
         {
-            ReadOnlyCollection<IWebElement> elems = driver.FindElements(By.Id("video-title"));
-
-            for (int i = 0; i < elems.Count; i++)
+            ReadOnlyCollection<IWebElement> names = driver.FindElements(By.Id("video-title"));
+            names_of_videos = new List<string>();
+            refs_of_videos = new List<string>();
+            for (int i = 0; i < names.Count; i++)
             {
-                Console.WriteLine(elems[i].GetAttribute("title"));
-            }
-            Console.WriteLine(elems.Count);
-
-            string[] names_of_videos = new string[elems.Count];
-            for (int i = 0; i < names_of_videos.Length; i++)
-            {
-                if ((elems[i].Text.IndexOf("snippet") != -1 || elems[i].Text.IndexOf("Snippet") != -1) &&
-                        (elems[i].Text.IndexOf(message.Text) != -1))
+                string str = names[i].GetAttribute("title").ToLower();
+                if ((str.IndexOf("snippet") != -1 || str.IndexOf("сниппет") != -1 || str.IndexOf("teaser") != -1
+                    || str.IndexOf("тизер") != -1) && str.IndexOf(message.Text.ToLower()) != -1)
                 {
-                    names_of_videos[i] = elems[i].GetAttribute("title");
+                    names_of_videos.Add(names[i].GetAttribute("title"));
+                    refs_of_videos.Add(names[i].GetAttribute("href"));
                 }
             }
             driver.Quit();
-            return names_of_videos;
+            return null;
         }
         catch (Exception ex) 
         {
             Console.WriteLine($"ОШИБКА: {ex.Message}");
             driver.Quit();
+            names_of_videos = new List<string>();
+            refs_of_videos = new List<string>();
             return null;
         }
     }
