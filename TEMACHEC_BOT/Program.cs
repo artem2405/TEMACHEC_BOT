@@ -45,7 +45,7 @@ class Bot
         Console.WriteLine();
 
         //СОЗДАНИЕ КНОПОК
-        ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]{new KeyboardButton[] { "СНИППЕТЫ", "ОТКУДА ТРЕК" },})
+        ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]{new KeyboardButton[] { "СНИППЕТЫ", "ОТКУДА ТРЕК (в разработке...)" },})
         {
             ResizeKeyboard = true
         };
@@ -77,7 +77,7 @@ class Bot
                         case 0:
                             await client.SendTextMessageAsync(message.Chat.Id,
                             "Привет! \nНажми кнопку СНИППЕТЫ, если хочешь получить сниппеты исполнителя " +
-                            "\nНажми кнопку ОТКУДА ТРЕК, если хочешь узнать из какого альбома трек исполнителя", replyMarkup: replyKeyboardMarkup);
+                            "\nНажми кнопку ОТКУДА ТРЕК, если хочешь узнать из какого альбома трек исполнителя (в разработке...)", replyMarkup: replyKeyboardMarkup);
                             break;
 
                         case 1:
