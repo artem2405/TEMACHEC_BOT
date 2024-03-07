@@ -37,7 +37,6 @@ class Bot
 
     private static async Task Update(ITelegramBotClient client, Update update, CancellationToken token)
     {
-        //Thread.Sleep(1000);
         var message = update.Message;
 
         Console.WriteLine();
